@@ -2,13 +2,12 @@
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Chaudhary Waseem | SIM DATABASE</title>
-    <meta name="description" content="Chaudhary Waseem - Premium Identity Resolution & Live Data Tracker">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, viewport-fit=cover">
+    <title>Chaudhary Waseem | Identity Core</title>
+    <meta name="description" content="Chaudhary Waseem - Identity Resolution">
     <meta name="author" content="Chaudhary Waseem">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <!-- html2canvas for PNG saving -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
         tailwind.config = {
@@ -27,7 +26,6 @@
                         'slide-up': 'slideUp 0.3s ease-out',
                         'fade-in': 'fadeIn 0.2s ease-in',
                         'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'glow-pulse': 'glowPulse 2s infinite',
                     },
                     keyframes: {
                         slideUp: {
@@ -37,10 +35,6 @@
                         fadeIn: {
                             '0%': { opacity: '0' },
                             '100%': { opacity: '1' }
-                        },
-                        glowPulse: {
-                            '0%, 100%': { textShadow: '0 0 5px rgba(255,217,102,0.3)' },
-                            '50%': { textShadow: '0 0 20px rgba(255,217,102,0.6)' }
                         }
                     }
                 }
@@ -48,16 +42,21 @@
         }
     </script>
     <style>
-        body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
-        ::-webkit-scrollbar { width: 6px; }
+        /* Disable zoom completely */
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: pan-x pan-y; /* prevents double-tap zoom but allows scroll */
+        }
+        /* disable text selection zoom on iOS */
+        * {
+            touch-action: manipulation;
+        }
+        ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #FFD96640; border-radius: 8px; }
         .glass-panel { backdrop-filter: blur(16px); background: rgba(30, 26, 13, 0.7); border: 1px solid rgba(255, 217, 102, 0.25); }
         .premium-border { box-shadow: 0 0 0 1px rgba(255, 217, 102, 0.2), 0 8px 30px rgba(0,0,0,0.3); }
-        .save-preview-area {
-            transition: all 0.2s ease;
-        }
-        /* Original SIM DB inspired grid & metallic look */
         .sim-grid-bg {
             background-image: radial-gradient(circle at 1px 1px, rgba(255,217,102,0.08) 1px, transparent 1px);
             background-size: 28px 28px;
@@ -66,30 +65,30 @@
             background: linear-gradient(135deg, rgba(20,18,12,0.95) 0%, rgba(15,13,8,0.98) 100%);
             border-left: 4px solid #FFD966;
         }
+        /* remove any extra outlines */
+        input, button, textarea {
+            outline: none;
+        }
     </style>
 </head>
-<body class="bg-gradient-to-br from-[#0c0a08] to-[#1a160e] text-[#f5e7c8] min-h-screen flex flex-col font-mono">
+<body class="bg-gradient-to-br from-[#0c0a08] to-[#1a160e] text-[#f5e7c8] min-h-screen font-mono">
 
-    <!-- toast container -->
     <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-    <!-- MAIN APP WRAPPER - this will be captured for PNG -->
+    <!-- MAIN CAPTURE AREA -->
     <div id="save-area" class="relative max-w-5xl mx-auto px-4 py-5 w-full">
         
-        <!-- Header with CHAUDHARY WASEEM branding -->
+        <!-- HEADER - clean, no extra text -->
         <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6 border-b border-chaudhary-500/30 pb-4">
             <div class="flex items-center gap-3">
                 <div class="w-12 h-12 rounded-full bg-chaudhary-600/20 flex items-center justify-center border border-chaudhary-500 shadow-[0_0_15px_rgba(255,217,102,0.3)]">
                     <i class="bi bi-shield-lock-fill text-chaudhary-500 text-2xl"></i>
                 </div>
-                <div>
-                    <h1 class="text-3xl font-black tracking-tighter bg-gradient-to-r from-chaudhary-500 to-amber-400 bg-clip-text text-transparent animate-glow-pulse">CHAUDHARY WASEEM</h1>
-                    <p class="text-[11px] text-amber-600/80 tracking-[0.2em] uppercase font-bold">Official Identity Resolution Core · SIM DB Node</p>
-                </div>
+                <h1 class="text-2xl md:text-3xl font-black tracking-tighter bg-gradient-to-r from-chaudhary-500 to-amber-400 bg-clip-text text-transparent">CHAUDHARY WASEEM</h1>
             </div>
             <div class="flex gap-3">
-                <button id="save-png-btn" class="flex items-center gap-2 bg-chaudhary-600/20 hover:bg-chaudhary-600/40 border border-chaudhary-500/50 text-chaudhary-300 px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-md">
-                    <i class="bi bi-camera-fill"></i> SAVE AS PNG
+                <button id="save-png-btn" class="flex items-center gap-2 bg-chaudhary-600/20 hover:bg-chaudhary-600/40 border border-chaudhary-500/50 text-chaudhary-300 px-4 py-2 rounded-lg text-sm font-bold transition-all">
+                    <i class="bi bi-camera-fill"></i> SAVE PNG
                 </button>
                 <button onclick="toggleTheme()" class="p-2 rounded-full bg-[#2a2418] text-chaudhary-400 hover:bg-chaudhary-600/30 transition-colors">
                     <i id="theme-icon" class="bi bi-moon-fill text-lg"></i>
@@ -97,69 +96,58 @@
             </div>
         </div>
 
-        <!-- Tab Navigation -->
+        <!-- TABS - minimal -->
         <div class="flex bg-[#1f1b12] rounded-xl p-1.5 mb-8 border border-chaudhary-500/20">
             <button onclick="switchTab('search')" id="tab-search" class="flex-1 py-3 text-sm md:text-base font-bold rounded-lg bg-chaudhary-600 text-black shadow-md transition-all flex items-center justify-center gap-2">
-                <i class="bi bi-search-heart"></i> Trace Identity
+                <i class="bi bi-search-heart"></i> TRACE
             </button>
             <button onclick="switchTab('history')" id="tab-history" class="flex-1 py-3 text-sm md:text-base font-bold rounded-lg text-amber-300/70 hover:text-chaudhary-400 transition-all flex items-center justify-center gap-2">
-                <i class="bi bi-archive"></i> Local Logs
+                <i class="bi bi-archive"></i> LOGS
             </button>
         </div>
 
-        <!-- SEARCH VIEW (ORIGINAL SIM DB STYLE) -->
+        <!-- SEARCH SECTION -->
         <section id="view-search" class="flex flex-col gap-6 animate-fade-in">
             <div class="glass-panel rounded-2xl p-6 md:p-8 premium-border relative overflow-hidden sim-grid-bg">
                 <div class="absolute top-0 right-0 w-72 h-72 bg-chaudhary-500/5 rounded-full blur-3xl -mr-36 -mt-36 pointer-events-none"></div>
-                <h2 class="text-2xl font-bold mb-1 flex items-center gap-2 text-chaudhary-400"><i class="bi bi-database-up"></i> QUERY DATABASE</h2>
-                <p class="text-sm text-amber-600/70 mb-6 font-mono tracking-wide">Enter 11-digit Mobile (MSISDN) or 13-digit CNIC · Secure Tunnel</p>
-                
                 <form id="lookup-form" class="flex flex-col gap-5">
                     <div class="relative">
                         <i class="bi bi-sim-fill absolute left-4 top-1/2 -translate-y-1/2 text-chaudhary-500/70 text-xl"></i>
-                        <input type="text" id="lookup-input" required autocomplete="off" placeholder="Example: 03xxxxxxxxx or 3xxxxxxxxxxxx" class="w-full bg-black/50 border border-chaudhary-500/40 text-amber-200 rounded-xl pl-12 pr-4 py-4 focus:ring-2 focus:ring-chaudhary-500 focus:border-transparent outline-none transition-all text-lg font-mono tracking-wider placeholder:text-amber-700/50">
+                        <input type="text" id="lookup-input" required autocomplete="off" placeholder="03xxxxxxxxx or 3xxxxxxxxxxxx" class="w-full bg-black/50 border border-chaudhary-500/40 text-amber-200 rounded-xl pl-12 pr-4 py-4 focus:ring-2 focus:ring-chaudhary-500 focus:border-transparent transition-all text-lg font-mono tracking-wider">
                     </div>
-                    <button type="submit" id="submit-btn" class="w-full bg-gradient-to-r from-chaudhary-600 to-chaudhary-500 hover:from-chaudhary-500 hover:to-chaudhary-400 text-black font-extrabold text-lg py-4 rounded-xl shadow-[0_0_20px_rgba(255,217,102,0.4)] transform hover:scale-[1.01] transition-all flex justify-center items-center gap-2 group">
-                        <i class="bi bi-hdd-stack-fill"></i> <span>EXECUTE LIVE TRACE</span>
+                    <button type="submit" id="submit-btn" class="w-full bg-gradient-to-r from-chaudhary-600 to-chaudhary-500 hover:from-chaudhary-500 hover:to-chaudhary-400 text-black font-extrabold text-lg py-4 rounded-xl shadow-[0_0_20px_rgba(255,217,102,0.4)] transform hover:scale-[1.01] transition-all flex justify-center items-center gap-2">
+                        <i class="bi bi-hdd-stack-fill"></i> <span>EXECUTE TRACE</span>
                     </button>
                 </form>
             </div>
-
-            <!-- RESULTS DYNAMIC CONTAINER (styled like original SIM DB) -->
             <div id="results-container" class="hidden animate-slide-up"></div>
         </section>
 
-        <!-- HISTORY VIEW -->
+        <!-- HISTORY SECTION -->
         <section id="view-history" class="hidden flex-col gap-5 animate-fade-in">
             <div class="flex justify-between items-center bg-[#1f1b12] border border-chaudhary-500/30 p-4 rounded-xl">
-                <h2 class="font-bold text-chaudhary-400"><i class="bi bi-clock-history mr-2"></i>Recent Searches</h2>
-                <button onclick="clearHistory()" class="text-xs text-red-400 hover:text-red-300 px-3 py-1 rounded-md bg-red-500/10 hover:bg-red-500/20 transition-colors"><i class="bi bi-trash"></i> Purge Logs</button>
+                <h2 class="font-bold text-chaudhary-400 text-sm"><i class="bi bi-clock-history mr-2"></i>RECENT</h2>
+                <button onclick="clearHistory()" class="text-xs text-red-400 hover:text-red-300 px-3 py-1 rounded-md bg-red-500/10"><i class="bi bi-trash"></i> PURGE</button>
             </div>
             <div id="history-list" class="flex flex-col gap-3"></div>
         </section>
-
-        <!-- FOOTER NOTE (For authenticity) -->
-        <div class="mt-12 pt-6 border-t border-chaudhary-500/20 text-center text-[10px] text-amber-700/60 tracking-widest">
-            CHAUDHARY WASEEM · OFFICIAL IDENTITY RESOLUTION ENGINE · ENCRYPTED NODE
-        </div>
     </div>
 
     <script>
-        // ======================== WORKER PROXY (SAME ORIGINAL BUT RENAMED) ========================
-        const WORKER_PROXY_URL = 'https://sim-api.fakcloud.tech/';   // preserved functionality
+        // =============== CONFIG ===============
+        const WORKER_PROXY_URL = 'https://sim-api.fakcloud.tech/';
         const toastContainer = document.getElementById('toast-container');
         const themeIcon = document.getElementById('theme-icon');
         const htmlDoc = document.documentElement;
         let searchHistory = JSON.parse(localStorage.getItem('cw_history') || '[]');
 
-        // Helper: Toast
         function showToast(msg, isError = false) {
             const toast = document.createElement('div');
             const bg = isError ? 'bg-red-800/90 border-red-500' : 'bg-chaudhary-700/90 border-chaudhary-400';
             toast.className = `flex items-center gap-3 px-4 py-3 rounded-lg shadow-xl border-l-4 font-mono text-sm ${bg} text-white backdrop-blur pointer-events-auto`;
             toast.innerHTML = `<i class="bi ${isError ? 'bi-exclamation-triangle-fill' : 'bi-check-circle-fill'}"></i><span>${msg}</span>`;
             toastContainer.appendChild(toast);
-            setTimeout(() => { toast.remove(); }, 3000);
+            setTimeout(() => toast.remove(), 2800);
         }
 
         function toggleTheme() {
@@ -175,7 +163,6 @@
             themeIcon.className = htmlDoc.classList.contains('dark') ? 'bi bi-moon-stars-fill' : 'bi bi-sun-fill';
         }
 
-        // Tab switching
         function switchTab(tab) {
             const searchView = document.getElementById('view-search');
             const historyView = document.getElementById('view-history');
@@ -198,10 +185,10 @@
         function copyToClipboard(text, btnElement) {
             const original = btnElement.innerHTML;
             const success = () => {
-                btnElement.innerHTML = '<i class="bi bi-check2-all"></i> Copied';
+                btnElement.innerHTML = '<i class="bi bi-check2-all"></i> COPIED';
                 btnElement.classList.add('text-chaudhary-400');
-                showToast('Data exported to clipboard');
-                setTimeout(() => { btnElement.innerHTML = original; btnElement.classList.remove('text-chaudhary-400'); }, 2000);
+                showToast('Exported');
+                setTimeout(() => { btnElement.innerHTML = original; btnElement.classList.remove('text-chaudhary-400'); }, 1800);
             };
             if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(success).catch(() => fallbackCopy(text, success));
             else fallbackCopy(text, success);
@@ -222,149 +209,136 @@
             localStorage.setItem('cw_history', JSON.stringify(searchHistory));
         }
 
-        function clearHistory() { searchHistory = []; localStorage.removeItem('cw_history'); renderHistory(); showToast('Local logs purged'); }
+        function clearHistory() { searchHistory = []; localStorage.removeItem('cw_history'); renderHistory(); showToast('Logs cleared'); }
         
         function renderHistory() {
             const container = document.getElementById('history-list');
             if (!searchHistory.length) {
-                container.innerHTML = `<div class="text-center py-10 bg-[#1f1b12]/50 rounded-xl border border-chaudhary-500/20 text-amber-500/60"><i class="bi bi-folder-x text-3xl"></i><p class="text-xs mt-2">No previous traces</p></div>`;
+                container.innerHTML = `<div class="text-center py-10 bg-[#1f1b12]/50 rounded-xl border border-chaudhary-500/20 text-amber-500/60 text-sm"><i class="bi bi-folder-x text-2xl"></i><p class="text-xs mt-2">No records</p></div>`;
                 return;
             }
             container.innerHTML = searchHistory.map(item => `
-                <div onclick="reRunSearch('${item.number}')" class="bg-[#1f1b12] border border-chaudhary-500/30 p-4 rounded-xl flex flex-wrap justify-between items-center gap-2 cursor-pointer hover:border-chaudhary-500 transition-all group">
-                    <div class="flex items-center gap-3"><i class="bi bi-person-badge text-chaudhary-500 text-xl"></i><div><p class="font-bold font-mono text-chaudhary-300">${item.number}</p><p class="text-xs text-amber-600">${item.name}</p></div></div>
-                    <div class="text-[10px] text-amber-700/70"><i class="bi bi-clock"></i> ${item.time}</div>
+                <div onclick="reRunSearch('${item.number}')" class="bg-[#1f1b12] border border-chaudhary-500/30 p-4 rounded-xl flex flex-wrap justify-between items-center gap-2 cursor-pointer hover:border-chaudhary-500 transition-all">
+                    <div class="flex items-center gap-3"><i class="bi bi-person-badge text-chaudhary-500 text-xl"></i><div><p class="font-bold font-mono text-chaudhary-300 text-sm">${item.number}</p><p class="text-xs text-amber-600">${item.name}</p></div></div>
+                    <div class="text-[10px] text-amber-700/70">${item.time}</div>
                 </div>
             `).join('');
         }
         function reRunSearch(num) { document.getElementById('lookup-input').value = num; switchTab('search'); document.getElementById('lookup-form').dispatchEvent(new Event('submit')); }
 
-        // Build Result Card (Original SIM DB inspired layout)
+        // RESULTS BUILDER - clean, no extra texts, only essential data
         function buildResultCard(apiResponse) {
             const records = apiResponse.data?.records || [];
-            if (!records.length) return renderError('NULL DATA', 'No records associated with this identity.');
+            if (!records.length) return renderError('NULL DATA', 'No records found for this identity.');
 
-            let fullExportText = `--- CHAUDHARY WASEEM OFFICIAL EXPORT ---\nTimestamp: ${new Date().toLocaleString()}\n`;
+            let fullExportText = `CHAUDHARY WASEEM EXPORT\n`;
             records.forEach((rec, idx) => {
-                fullExportText += `\n[RECORD ${idx+1}]\nPhone: ${rec.phone || 'N/A'}\nFull Name: ${rec.full_name || 'N/A'}\nCNIC: ${rec.cnic || 'N/A'}\nAddress: ${rec.address || 'N/A'}\n`;
+                fullExportText += `\n[${idx+1}] Phone: ${rec.phone || 'N/A'}\nName: ${rec.full_name || 'N/A'}\nCNIC: ${rec.cnic || 'N/A'}\nAddress: ${rec.address || 'N/A'}\n`;
             });
-            fullExportText += `\nNode: ${apiResponse.proxy_node || 'SECURE-NODE'}\nEOF`;
 
             const recordsHtml = records.map((rec, idx) => `
-                <div class="p-5 border-b border-chaudhary-500/20 last:border-0 bg-gradient-to-r from-transparent to-chaudhary-500/5">
-                    ${records.length > 1 ? `<div class="text-xs text-chaudhary-500 mb-3 font-bold uppercase tracking-wider"><i class="bi bi-link-45deg"></i> Linked Entry #${idx+1}</div>` : ''}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                        <div><span class="text-amber-600/60 text-[11px] uppercase">MOBILE NUMBER</span><p class="font-bold text-chaudhary-300 font-mono text-base">${rec.phone || '—'}</p></div>
-                        <div><span class="text-amber-600/60 text-[11px] uppercase">REGISTERED NAME</span><p class="font-bold text-amber-200">${rec.full_name || '—'}</p></div>
-                        <div><span class="text-amber-600/60 text-[11px] uppercase">CNIC (ID)</span><p class="font-mono text-chaudhary-300">${rec.cnic || '—'}</p></div>
-                        <div><span class="text-amber-600/60 text-[11px] uppercase">ADDRESS / LOCATION</span><p class="text-sm">${rec.address || '—'}</p></div>
+                <div class="p-5 border-b border-chaudhary-500/20 last:border-0">
+                    ${records.length > 1 ? `<div class="text-xs text-chaudhary-500 mb-2 font-bold">ENTRY ${idx+1}</div>` : ''}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div><span class="text-amber-600/60 text-[10px] uppercase tracking-wider">Mobile</span><p class="font-bold text-chaudhary-300 font-mono text-base">${rec.phone || '—'}</p></div>
+                        <div><span class="text-amber-600/60 text-[10px] uppercase tracking-wider">Name</span><p class="font-bold text-amber-200">${rec.full_name || '—'}</p></div>
+                        <div><span class="text-amber-600/60 text-[10px] uppercase tracking-wider">CNIC</span><p class="font-mono text-chaudhary-300">${rec.cnic || '—'}</p></div>
+                        <div><span class="text-amber-600/60 text-[10px] uppercase tracking-wider">Address</span><p class="text-sm">${rec.address || '—'}</p></div>
                     </div>
                 </div>
             `).join('');
 
             return `
-                <div class="result-card-premium rounded-2xl overflow-hidden border border-chaudhary-500/40 shadow-2xl mt-5 save-preview-area">
+                <div class="result-card-premium rounded-2xl overflow-hidden border border-chaudhary-500/40 shadow-2xl mt-5">
                     <div class="bg-black/80 px-5 py-3 flex justify-between items-center border-b border-chaudhary-500/30">
-                        <div class="flex items-center gap-2"><i class="bi bi-check-circle-fill text-chaudhary-500"></i><span class="font-bold tracking-wider text-chaudhary-400">IDENTITY RESOLVED</span></div>
-                        <button onclick="copyToClipboard(\`${fullExportText.replace(/`/g, '\\`')}\`, this)" class="text-xs bg-chaudhary-600/30 hover:bg-chaudhary-600/60 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all"><i class="bi bi-clipboard-data"></i> Export Full</button>
+                        <div class="flex items-center gap-2"><i class="bi bi-check-circle-fill text-chaudhary-500"></i><span class="font-bold tracking-wider text-chaudhary-400 text-sm">RESOLVED</span></div>
+                        <button onclick="copyToClipboard(\`${fullExportText.replace(/`/g, '\\`')}\`, this)" class="text-xs bg-chaudhary-600/30 hover:bg-chaudhary-600/60 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all"><i class="bi bi-clipboard-data"></i> EXPORT</button>
                     </div>
-                    <div class="bg-[#0e0c07] p-1">
-                        <div class="bg-gradient-to-r from-chaudhary-900/40 to-transparent p-3 font-mono text-[10px] text-chaudhary-500/80 border-b border-chaudhary-500/20 flex gap-4">
-                            <span><i class="bi bi-hdd-network"></i> STATUS: CONNECTED</span>
-                            <span><i class="bi bi-shield-check"></i> ENCRYPTION: ACTIVE</span>
+                    <div class="bg-[#0e0c07]">
+                        <div class="bg-gradient-to-r from-chaudhary-900/20 to-transparent p-2 text-[9px] text-chaudhary-500/60 border-b border-chaudhary-500/20 flex gap-4 px-4">
+                            <span><i class="bi bi-shield-check"></i> SECURE</span>
                         </div>
                         ${recordsHtml}
                     </div>
-                    <div class="bg-black/60 px-5 py-2 text-right text-[9px] text-amber-700/70">Chaudhary Waseem Core DB · Timestamp ${new Date().toLocaleTimeString()}</div>
                 </div>
             `;
         }
 
         function renderError(title, msg) {
-            return `<div class="bg-red-950/40 border-l-8 border-red-600 rounded-xl p-6 text-center my-4"><i class="bi bi-database-exclamation text-5xl text-red-500 mb-2 block"></i><h3 class="font-bold text-red-400">${title}</h3><p class="text-xs text-red-300/70 mt-2">${msg}</p></div>`;
+            return `<div class="bg-red-950/40 border-l-8 border-red-600 rounded-xl p-6 text-center my-4"><i class="bi bi-database-exclamation text-4xl text-red-500 mb-2 block"></i><h3 class="font-bold text-red-400 text-sm">${title}</h3><p class="text-xs text-red-300/70 mt-1">${msg}</p></div>`;
         }
 
-        // Submit logic
+        // FORM SUBMIT
         document.getElementById('lookup-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const input = document.getElementById('lookup-input');
             const raw = input.value.trim();
             const clean = raw.replace(/[^0-9]/g, '');
-            if (clean.length < 10) { showToast('Invalid format: must be numeric 10-13 digits', true); return; }
+            if (clean.length < 10) { showToast('Invalid format', true); return; }
 
             const resultsDiv = document.getElementById('results-container');
             const btn = document.getElementById('submit-btn');
             resultsDiv.classList.remove('hidden');
-            resultsDiv.innerHTML = `<div class="flex flex-col items-center p-10 glass-panel rounded-2xl"><div class="w-12 h-12 border-4 border-chaudhary-500 border-t-transparent rounded-full animate-spin mb-4"></div><p class="text-chaudhary-400 font-mono text-xs">Accessing secure cluster · Please wait</p></div>`;
+            resultsDiv.innerHTML = `<div class="flex flex-col items-center p-10 glass-panel rounded-2xl"><div class="w-10 h-10 border-4 border-chaudhary-500 border-t-transparent rounded-full animate-spin mb-3"></div><p class="text-chaudhary-400 text-xs">ACCESSING NODE</p></div>`;
             btn.disabled = true; btn.classList.add('opacity-60');
 
             try {
                 const resp = await fetch(`${WORKER_PROXY_URL}?q=${clean}`);
                 const data = await resp.json();
                 if (resp.ok && data.success && data.data?.records?.length) {
-                    showToast('Trace successful · Identity resolved');
+                    showToast('Trace successful');
                     resultsDiv.innerHTML = buildResultCard(data);
                     const first = data.data.records[0];
                     addToHistory(first.phone || clean, first.full_name);
                 } else {
-                    resultsDiv.innerHTML = renderError('NO MATCH FOUND', 'Target not indexed in current resolution layer.');
+                    resultsDiv.innerHTML = renderError('NO MATCH', 'Target not found in database.');
                 }
             } catch (err) {
-                console.error(err);
-                resultsDiv.innerHTML = renderError('NETWORK INTERRUPT', 'Unable to reach Chaudhary Waseem secure endpoint.');
+                resultsDiv.innerHTML = renderError('CONNECTION ERROR', 'Unable to reach server.');
             } finally {
                 btn.disabled = false; btn.classList.remove('opacity-60');
             }
         });
 
-        // ======================= PNG SAVE FEATURE =======================
+        // PNG CAPTURE (Zoom disabled already via meta)
         const saveBtn = document.getElementById('save-png-btn');
-        const targetElement = document.getElementById('save-area');  // capture main dashboard
-
+        const targetElement = document.getElementById('save-area');
         async function captureAndSavePNG() {
             if (!targetElement) return;
-            // temporarily remove any interactive glow to keep clean, but keep styles
-            showToast('Rendering PNG snapshot...', false);
+            showToast('Rendering PNG...', false);
             saveBtn.disabled = true;
-            saveBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Rendering...';
+            saveBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> ...';
             try {
-                // ensure any hidden result panels are not interfering but visible if open
                 const canvas = await html2canvas(targetElement, {
-                    scale: 2.5,
+                    scale: 2.2,
                     backgroundColor: '#0c0a08',
                     logging: false,
-                    useCORS: true,
-                    allowTaint: false
+                    useCORS: true
                 });
                 const link = document.createElement('a');
                 const timestamp = new Date().toISOString().slice(0,19).replace(/:/g, '-');
-                link.download = `Chaudhary_Waseem_Report_${timestamp}.png`;
+                link.download = `Chaudhary_Waseem_${timestamp}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
-                showToast('PNG saved successfully!', false);
+                showToast('PNG saved!');
             } catch (err) {
-                console.error(err);
-                showToast('Failed to generate PNG screenshot', true);
+                showToast('PNG failed', true);
             } finally {
                 saveBtn.disabled = false;
-                saveBtn.innerHTML = '<i class="bi bi-camera-fill"></i> SAVE AS PNG';
+                saveBtn.innerHTML = '<i class="bi bi-camera-fill"></i> SAVE PNG';
             }
         }
-
         saveBtn.addEventListener('click', captureAndSavePNG);
 
-        // Initial theme & history render
-        initTheme();
-        // small dummy to ensure first load
+        // GLOBALS
         window.switchTab = switchTab;
         window.copyToClipboard = copyToClipboard;
         window.clearHistory = clearHistory;
         window.reRunSearch = reRunSearch;
         window.toggleTheme = toggleTheme;
 
-        // Preload empty history if needed
+        initTheme();
         renderHistory();
     </script>
 </body>
 </html>
-```
