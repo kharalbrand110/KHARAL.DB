@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, viewport-fit=cover">
-    <title>Chaudhary Waseem | Identity Core</title>
-    <meta name="description" content="Chaudhary Waseem - Identity Resolution">
-    <meta name="author" content="Chaudhary Waseem">
+    <title>AMJID KHARAL | Identity Core</title>
+    <meta name="description" content="AMJID KHARAL - Identity Resolution">
+    <meta name="author" content="AMJID KHARAL">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -231,7 +231,7 @@
             const records = apiResponse.data?.records || [];
             if (!records.length) return renderError('NULL DATA', 'No records found for this identity.');
 
-            let fullExportText = `CHAUDHARY WASEEM EXPORT\n`;
+            let fullExportText = `AMJID KHARAL EXPORT\n`;
             records.forEach((rec, idx) => {
                 fullExportText += `\n[${idx+1}] Phone: ${rec.phone || 'N/A'}\nName: ${rec.full_name || 'N/A'}\nCNIC: ${rec.cnic || 'N/A'}\nAddress: ${rec.address || 'N/A'}\n`;
             });
@@ -317,7 +317,7 @@
                 });
                 const link = document.createElement('a');
                 const timestamp = new Date().toISOString().slice(0,19).replace(/:/g, '-');
-                link.download = `Chaudhary_Waseem_${timestamp}.png`;
+                link.download = `AMJID_KHARAL_${timestamp}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
                 showToast('PNG saved!');
